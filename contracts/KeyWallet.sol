@@ -104,4 +104,43 @@ contract Permissions {
         address destination;
         bool enabled;
     }
+
+    Owner public owner;
+
+    //ERC20[] public erc20s;
+    //ERC721[] public erc721;
+    //ERC777[] public erc777;
+
+
+//should be a zeppelinOS library for this
+    function SetOwner() {}
+
+//require onlyOwner
+    function SetPermissions() {}
+
+    function getEthBalance() {}
+
+    function getERC20TokenBalance(ERC20 _contractAddress) {}
+
+    function getERC20TokenCount() returns(uint){}
+
+    function getERC20TokenList() returns(address[]){}
+
+    function getERC721TokenCount() returns(uint){}
+
+    function getERC721TokenList()returns(address[]){}
+
+    function getERC777TokenCount() returns(uint){}
+
+    function getERC777TokenList() returns(address[]){}
+
+    
+    //Maybe this should be done in one global registry of Tokens
+    function _registerERC20() {}
+    function _registerERC721() {}
+    function _registerERC777() {}
+
+
+
+    
 }
