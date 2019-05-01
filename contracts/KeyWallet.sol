@@ -1,6 +1,9 @@
 pragma solidity ^0.5.0;
 
-contract Permissions {
+import "zos-lib/contracts/Initializable.sol";
+import "openzeppelin-eth/contracts/ownership/Ownable"; 
+
+contract Permissions is Initializable, Ownable {
     
     struct Owner {
         address owner;
@@ -112,8 +115,9 @@ contract Permissions {
     //ERC777[] public erc777;
 
 
-//should be a zeppelinOS library for this
-    function SetOwner() {}
+    function initialize(address sender) public initializer {
+        Ownable.initialize(sender);
+    }
 
 //require onlyOwner
     function SetPermissions() {}
