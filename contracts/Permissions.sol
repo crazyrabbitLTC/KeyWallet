@@ -8,7 +8,9 @@ contract Permissions is Initializable, Ownable {
     struct Owner {
         address owner;
         Key[] activeKeys;
-        Key[] disabledKeys;
+        mapping(address => bool) isKeyActive;
+        uint totalKeys;
+        uint totalActiveKeys;
         MultiSig multiSig;
         CallRecord[] callHistoryArray;
         mapping(uint => CallRecord) callHistoryMapping;
@@ -18,8 +20,9 @@ contract Permissions is Initializable, Ownable {
     }
     
     struct Key {
-        address[] revokePermission;
-        address[] alterLimits;
+        address keyAddress;
+        //address[] revokePermission;
+        //address[] alterLimits;
         ContractPermission[] contractList;
         CallRecord[] callHistoryArray;
         mapping(uint => CallRecord) callHistoryMapping;
@@ -115,31 +118,43 @@ contract Permissions is Initializable, Ownable {
     //ERC777[] public erc777;
 
 
-    function initialize(address sender) public initializer {
-        Ownable.initialize(sender);
+    function initialize(address _sender) public initializer {
+        Ownable.initialize(_sender);
+        owner.owner = _sender;
     }
 
 //require onlyOwner
-    function SetPermissions() {}
+    function SetPermissions() public onlyOwner {}
 
-    function getEthBalance() {}
+    function AddPermissionKey(address _key, bool _isKeyActive, ContractPermission[] _contractList, uint256 _delayEnabled, Delay _delay) public onlyOwner{
 
-    function getERC20TokenBalance(ERC20 _contractAddress) {}
+    Key _newKey = Key({keyAddress: _key, contractList: _contractList, delayEnabled: _delayEnabled, delay: _delay});
 
-    function getERC20TokenCount() returns(uint){}
+    owner.activeKeys.push(_newKey);
+    owner.isKeyActive[_key] = _isKeyActive;
+    owner.totalKeys += 1;
 
-    function getERC20TokenList() returns(address[]){}
+    }
 
-    function getERC721TokenCount() returns(uint){}
 
-    function getERC721TokenList()returns(address[]){}
+    // function getEthBalance() {}
 
-    function getERC777TokenCount() returns(uint){}
+    // function getERC20TokenBalance(ERC20 _contractAddress) {}
 
-    function getERC777TokenList() returns(address[]){}
+    // function getERC20TokenCount() returns(uint){}
+
+    // function getERC20TokenList() returns(address[]){}
+
+    // function getERC721TokenCount() returns(uint){}
+
+    // function getERC721TokenList()returns(address[]){}
+
+    // function getERC777TokenCount() returns(uint){}
+
+    // function getERC777TokenList() returns(address[]){}
 
     
-    //Maybe this should be done in one global registry of Tokens
+    //Maybe this should be done in one global registry of Tokens also
     function _registerERC20() {}
     function _registerERC721() {}
     function _registerERC777() {}
