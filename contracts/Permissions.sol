@@ -18,6 +18,7 @@ contract Permissions is Initializable, Ownable {
         uint256 delayEnabled;
         Delay delay;
     }
+
     
     struct Key {
         address keyAddress;
@@ -31,6 +32,7 @@ contract Permissions is Initializable, Ownable {
         Delay delay;
     }
     
+    event newKeyAdded(address indexed keyAdded, bool isActive, bool delayEnabled, uint delay);
     struct ContractPermission {
         address allowedContract;
         MultiSig coSigners;
@@ -126,7 +128,7 @@ contract Permissions is Initializable, Ownable {
 //require onlyOwner
     function SetPermissions() public onlyOwner {}
 
-    function AddPermissionKey(address _key, bool _isKeyActive, ContractPermission[] _contractList, uint256 _delayEnabled, Delay _delay) public onlyOwner{
+    function AddPermissionKey(address _key, bool _isKeyActive, ContractPermission[] _contractList, uint256 _delayEnabled, Delay _delay) public onlyOwner returns (bool){
 
     Key _newKey = Key({keyAddress: _key, contractList: _contractList, delayEnabled: _delayEnabled, delay: _delay});
 
@@ -134,6 +136,9 @@ contract Permissions is Initializable, Ownable {
     owner.isKeyActive[_key] = _isKeyActive;
     owner.totalKeys += 1;
 
+    emit(_key, _isKeyActive, _newKey.delay.enabled, _newKey.delay.delay);
+
+    return true;
     }
 
 
